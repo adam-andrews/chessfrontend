@@ -56,7 +56,9 @@ const chessboard = [
   ["p", "p", "p", "p", "p", "p", "p", "p"],
   ["r", "n", "b", "q", "k", "b", "n", "r"],
 ];
-
+// ColIndex = Letter
+// Row Index = number
+const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
 export default function Index() {
   return (
     <View style={styles.container}>
@@ -68,6 +70,7 @@ export default function Index() {
             {row.map((pieceCode, colIndex) => {
               const isLightSquare = (rowIndex + colIndex) % 2 === 0;
               const isPressed = false;
+              const chessSquare = chessSquares[colIndex] + (8 - rowIndex);
 
               return (
                 <View
@@ -85,6 +88,7 @@ export default function Index() {
                         style={styles.piece}
                         resizeMode="contain"
                       />
+                      <Text>{chessSquare} </Text>
                     </Pressable>
                   )}
                 </View>
