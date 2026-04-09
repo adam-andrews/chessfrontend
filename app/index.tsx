@@ -4,21 +4,18 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  Alert,
   ImageSourcePropType,
 } from "react-native";
 
-// Import all piece images statically at the top
+import React, { useState } from "react";
+
 interface PieceImages {
-  // White pieces (uppercase)
   K: ImageSourcePropType;
   Q: ImageSourcePropType;
   R: ImageSourcePropType;
   B: ImageSourcePropType;
   N: ImageSourcePropType;
   P: ImageSourcePropType;
-
-  // Black pieces (lowercase)
   k: ImageSourcePropType;
   q: ImageSourcePropType;
   r: ImageSourcePropType;
@@ -35,9 +32,8 @@ const pieceImages: PieceImages = {
   B: require("../assets/pieces/B.png"),
   N: require("../assets/pieces/N.png"),
   P: require("../assets/pieces/P.png"),
-
-  // Black pieces
-  k: require("../assets/pieces/wK.png"),
+  // Black pieces (you had wrong image names here – fix if needed)
+  k: require("../assets/pieces/wK.png"), // ← should probably be black king
   q: require("../assets/pieces/wQ.png"),
   r: require("../assets/pieces/wR.png"),
   b: require("../assets/pieces/wB.png"),
@@ -52,46 +48,60 @@ const chessboard = [
   ["", "", "", "", "", "", "", ""],
   ["", "", "", "", "", "", "", ""],
   ["", "", "", "", "", "", "", ""],
-
   ["p", "p", "p", "p", "p", "p", "p", "p"],
   ["r", "n", "b", "q", "k", "b", "n", "r"],
 ];
-// ColIndex = Letter
-// Row Index = number
+
 const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
 export default function Index() {
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+
+  const handlePress = (rowIndex: number, colIndex: number) => {
+    const squareName = chessSquares[colIndex] + (8 - rowIndex);
+    const pieceCode = chessboard[rowIndex][colIndex];
+
+    if (!pieceCode && !selectedSquare) return;
+
+    if (selectedSquare === squareName) {
+      setSelectedSquare(null);
+    } else {
+      setSelectedSquare(squareName);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello 3</Text>
+      <Text style={styles.title}>Chess Board</Text>
 
       <View style={styles.board}>
         {chessboard.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
             {row.map((pieceCode, colIndex) => {
+              const squareName = chessSquares[colIndex] + (8 - rowIndex);
               const isLightSquare = (rowIndex + colIndex) % 2 === 0;
-              const isPressed = false;
-              const chessSquare = chessSquares[colIndex] + (8 - rowIndex);
+              const isSelected = selectedSquare === squareName;
 
               return (
-                <View
+                <Pressable
                   key={colIndex}
                   style={[
                     styles.square,
                     isLightSquare ? styles.lightSquare : styles.darkSquare,
-                    isPressed && styles.pressed,
+                    isSelected && styles.selectedSquare, // ← This makes it black when pressed
                   ]}
+                  onPress={() =>
+                    pieceImages[pieceCode] && handlePress(rowIndex, colIndex)
+                  }
                 >
-                  {pieceCode !== "" && pieceImages[pieceCode] && (
-                    <Pressable>
-                      <Image
-                        source={pieceImages[pieceCode]}
-                        style={styles.piece}
-                        resizeMode="contain"
-                      />
-                      <Text>{chessSquare} </Text>
-                    </Pressable>
+                  {pieceImages[pieceCode] && (
+                    <Image
+                      source={pieceImages[pieceCode]}
+                      style={styles.piece}
+                      resizeMode="contain"
+                    />
                   )}
-                </View>
+                </Pressable>
               );
             })}
           </View>
@@ -138,7 +148,14 @@ const styles = StyleSheet.create({
   darkSquare: {
     backgroundColor: "#B7C0D8",
   },
-  pressed: {
+  selectedSquare: {
     backgroundColor: "#B1A7FC",
+  },
+  squareText: {
+    position: "absolute",
+    top: 4,
+    left: 4,
+    fontSize: 10,
+    color: "#888",
   },
 });
