@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   ImageSourcePropType,
+  TextInput,
 } from "react-native";
 
 import React, { useState } from "react";
@@ -69,7 +70,12 @@ export default function Index() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const board =
     "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR";
+  const [text, setText] = useState("");
 
+  const submit = () => {
+    console.log("Input submitted:", text);
+    setText("");
+  };
   const handlePress = (rowIndex: number, colIndex: number) => {
     const squareName = chessSquares[colIndex] + (8 - rowIndex);
     const pieceCode = chessboard[rowIndex][colIndex];
@@ -119,6 +125,14 @@ export default function Index() {
             })}
           </View>
         ))}
+
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          placeholder="Enter move here..."
+          returnKeyType="done" // Shows "Done" on keyboard
+          onSubmitEditing={submit} // Triggered when Enter/Done is pressed
+        />
       </View>
     </View>
   );
