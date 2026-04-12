@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import React, { useState } from "react";
-
+import { Chess } from "chess.js";
 interface PieceImages {
   K: ImageSourcePropType;
   Q: ImageSourcePropType;
@@ -44,14 +44,14 @@ const pieceImages: PieceImages = {
   p: require("../assets/pieces/P.png"),
 };
 
-function fenToBoard() {
-  const chessFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+function fenToBoard(chessFen: string) {
   const chessPieces = chessFen.split(" ")[0];
 
   const board = chessPieces.replace(/[1-8]/g, (m) => {
     const num = parseInt(m);
     return " ".repeat(num);
   });
+  return board;
 }
 const chessboard = [
   ["R", "N", "B", "Q", "K", "B", "N", "R"],
@@ -68,13 +68,19 @@ const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export default function Index() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  const board =
-    "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR";
+  const [board, setBoard] = useState(
+    "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR",
+  );
   const [text, setText] = useState("");
+  const chess = new Chess();
 
   const submit = () => {
     console.log("Input submitted:", text);
+    chess.move(text);
     setText("");
+    const newBoard = fenToBoard(chess.fen());
+    setBoard(newBoard);
+    console.log(chess.fen());
   };
   const handlePress = (rowIndex: number, colIndex: number) => {
     const squareName = chessSquares[colIndex] + (8 - rowIndex);
@@ -107,7 +113,7 @@ export default function Index() {
                   style={[
                     styles.square,
                     isLightSquare ? styles.lightSquare : styles.darkSquare,
-                    isSelected && styles.selectedSquare, // ← This makes it black when pressed
+                    isSelected && styles.selectedSquare,
                   ]}
                   onPress={() =>
                     pieceImages[pieceCode] && handlePress(rowIndex, colIndex)
@@ -130,8 +136,9 @@ export default function Index() {
           value={text}
           onChangeText={setText}
           placeholder="Enter move here..."
-          returnKeyType="done" // Shows "Done" on keyboard
-          onSubmitEditing={submit} // Triggered when Enter/Done is pressed
+          returnKeyType="done"
+          onSubmitEditing={submit}
+          autoCapitalize="none"
         />
       </View>
     </View>
