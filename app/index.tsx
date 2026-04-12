@@ -23,22 +23,24 @@ interface PieceImages {
   n: ImageSourcePropType;
   p: ImageSourcePropType;
 }
-
+//Uppercase (capital) letters = White pieces
+// Lowercase letters = Black pieces
 const pieceImages: PieceImages = {
   // White pieces
-  K: require("../assets/pieces/K.png"),
-  Q: require("../assets/pieces/Q.png"),
-  R: require("../assets/pieces/R.png"),
-  B: require("../assets/pieces/B.png"),
-  N: require("../assets/pieces/N.png"),
-  P: require("../assets/pieces/P.png"),
-  // Black pieces (you had wrong image names here – fix if needed)
-  k: require("../assets/pieces/wK.png"), // ← should probably be black king
-  q: require("../assets/pieces/wQ.png"),
-  r: require("../assets/pieces/wR.png"),
-  b: require("../assets/pieces/wB.png"),
-  n: require("../assets/pieces/wN.png"),
-  p: require("../assets/pieces/wP.png"),
+  K: require("../assets/pieces/wK.png"),
+  Q: require("../assets/pieces/wQ.png"),
+  R: require("../assets/pieces/wR.png"),
+  B: require("../assets/pieces/wB.png"),
+  N: require("../assets/pieces/wN.png"),
+  P: require("../assets/pieces/wP.png"),
+
+  // Black pieces
+  k: require("../assets/pieces/K.png"),
+  q: require("../assets/pieces/Q.png"),
+  r: require("../assets/pieces/R.png"),
+  b: require("../assets/pieces/B.png"),
+  n: require("../assets/pieces/N.png"),
+  p: require("../assets/pieces/P.png"),
 };
 
 function fenToBoard() {
@@ -49,8 +51,6 @@ function fenToBoard() {
     const num = parseInt(m);
     return " ".repeat(num);
   });
-
-  console.log(board);
 }
 const chessboard = [
   ["R", "N", "B", "Q", "K", "B", "N", "R"],
