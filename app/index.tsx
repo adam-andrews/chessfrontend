@@ -24,6 +24,7 @@ interface PieceImages {
   n: ImageSourcePropType;
   p: ImageSourcePropType;
 }
+
 //Uppercase (capital) letters = White pieces
 // Lowercase letters = Black pieces
 const pieceImages: PieceImages = {
@@ -68,6 +69,10 @@ const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export default function Index() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  const [possibleMoves, setPossibleMoves] = useState<string[] | null>([
+    "e4",
+    "e3",
+  ]);
   const [board, setBoard] = useState(
     "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR",
   );
@@ -119,6 +124,10 @@ export default function Index() {
                     pieceImages[pieceCode] && handlePress(rowIndex, colIndex)
                   }
                 >
+                  {!pieceImages[pieceCode] &&
+                    possibleMoves.includes(squareName) && (
+                      <View style={styles.purpleDot} />
+                    )}
                   {pieceImages[pieceCode] && (
                     <Image
                       source={pieceImages[pieceCode]}
@@ -191,5 +200,11 @@ const styles = StyleSheet.create({
     left: 4,
     fontSize: 10,
     color: "#888",
+  },
+  purpleDot: {
+    height: 13,
+    width: 13,
+    backgroundColor: "#B1A7FC",
+    borderRadius: 6,
   },
 });
