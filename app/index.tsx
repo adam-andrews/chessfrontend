@@ -41,6 +41,17 @@ const pieceImages: PieceImages = {
   p: require("../assets/pieces/wP.png"),
 };
 
+function fenToBoard() {
+  const chessFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const chessPieces = chessFen.split(" ")[0];
+
+  const board = chessPieces.replace(/[1-8]/g, (m) => {
+    const num = parseInt(m);
+    return " ".repeat(num);
+  });
+
+  console.log(board);
+}
 const chessboard = [
   ["R", "N", "B", "Q", "K", "B", "N", "R"],
   ["P", "P", "P", "P", "P", "P", "P", "P"],
@@ -56,6 +67,8 @@ const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export default function Index() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  const board =
+    "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR";
 
   const handlePress = (rowIndex: number, colIndex: number) => {
     const squareName = chessSquares[colIndex] + (8 - rowIndex);
@@ -75,9 +88,9 @@ export default function Index() {
       <Text style={styles.title}>Chess Board</Text>
 
       <View style={styles.board}>
-        {chessboard.map((row, rowIndex) => (
+        {board.split("/").map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
-            {row.map((pieceCode, colIndex) => {
+            {row.split("").map((pieceCode, colIndex) => {
               const squareName = chessSquares[colIndex] + (8 - rowIndex);
               const isLightSquare = (rowIndex + colIndex) % 2 === 0;
               const isSelected = selectedSquare === squareName;
