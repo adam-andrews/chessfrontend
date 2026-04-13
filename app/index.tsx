@@ -57,6 +57,8 @@ function fenToBoard(chessFen: string) {
 
 const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
+const chess = new Chess();
+
 export default function Index() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
@@ -64,7 +66,6 @@ export default function Index() {
     "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR",
   );
   const [text, setText] = useState("");
-  const chess = new Chess();
 
   const submitMove = (square) => {
     console.log("Input submitted:", text);
