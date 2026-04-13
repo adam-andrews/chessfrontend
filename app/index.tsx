@@ -54,25 +54,12 @@ function fenToBoard(chessFen: string) {
   });
   return board;
 }
-const chessboard = [
-  ["R", "N", "B", "Q", "K", "B", "N", "R"],
-  ["P", "P", "P", "P", "P", "P", "P", "P"],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["p", "p", "p", "p", "p", "p", "p", "p"],
-  ["r", "n", "b", "q", "k", "b", "n", "r"],
-];
 
 const chessSquares = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export default function Index() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  const [possibleMoves, setPossibleMoves] = useState<string[] | null>([
-    "e4",
-    "e3",
-  ]);
+  const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
   const [board, setBoard] = useState(
     "rnbqkbnr/pppppppp/        /        /        /        /PPPPPPPP/RNBQKBNR",
   );
@@ -89,6 +76,8 @@ export default function Index() {
       setText("");
       const newBoard = fenToBoard(chess.fen());
       setBoard(newBoard);
+      setSelectedSquare(null);
+      setPossibleMoves([]);
     } catch {
       setText("Illegal Move");
     }
@@ -109,9 +98,15 @@ export default function Index() {
     }
   };
   const handlePress = (rowIndex: number, colIndex: number) => {
-    // Gets the name of tge square e.g E4
+    // Gets the name of the square e.g E4
     const squareName = chessSquares[colIndex] + (8 - rowIndex);
-    const pieceCode = chessboard[rowIndex][colIndex];
+    console.log("Yellow", rowIndex, colIndex);
+    console.log(board);
+    // Gets the correct index of the piece from board (Also adds slashes)
+    let pieceIndex = rowIndex * 8 + colIndex;
+    pieceIndex += Math.floor(pieceIndex / 8); // 8
+    console.log(pieceIndex, "Piece Index?");
+    const pieceCode = board[pieceIndex];
 
     if (!pieceCode && !selectedSquare) return;
 
