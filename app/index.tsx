@@ -79,6 +79,21 @@ export default function Index() {
   const [text, setText] = useState("");
   const chess = new Chess();
 
+  const submitMove = (square) => {
+    console.log("Input submitted:", text);
+    if (chess.isGameOver()) return;
+    try {
+      chess.move(selectedSquare + "-" + square);
+      const moves = chess.moves();
+      console.log(moves);
+      setText("");
+      const newBoard = fenToBoard(chess.fen());
+      setBoard(newBoard);
+    } catch {
+      setText("Illegal Move");
+    }
+  };
+
   const submit = () => {
     console.log("Input submitted:", text);
     if (chess.isGameOver()) return;
@@ -104,11 +119,13 @@ export default function Index() {
     if (selectedSquare === squareName) {
       setSelectedSquare(null);
     } else {
-      //
-      const pieceMoves = chess.moves({ square: squareName });
-      setPossibleMoves(pieceMoves);
+      //Gets the verbose move, and returns the square they are moving to
+      const pieceMoves = chess.moves({ square: squareName, verbose: true });
+      const squareMoves = pieceMoves.map((move) => move.to);
+      console.log(squareMoves);
       console.log(pieceMoves);
       setSelectedSquare(squareName);
+      setPossibleMoves(squareMoves);
     }
   };
 
@@ -132,9 +149,14 @@ export default function Index() {
                     isLightSquare ? styles.lightSquare : styles.darkSquare,
                     isSelected && styles.selectedSquare,
                   ]}
-                  onPress={() =>
-                    pieceImages[pieceCode] && handlePress(rowIndex, colIndex)
-                  }
+                  onPress={() => {
+                    if (possibleMoves.includes(squareName)) {
+                      submitMove(squareName);
+                    } else if (pieceImages[pieceCode]) {
+                      handlePress(rowIndex, colIndex);
+                    } else {
+                    }
+                  }}
                 >
                   {!pieceImages[pieceCode] &&
                     possibleMoves.includes(squareName) && (
