@@ -1,5 +1,7 @@
 import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
+
+// White Pawn SVG
 export const WhitePawn = (props: SvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -20,8 +22,15 @@ export const WhitePawn = (props: SvgProps) => (
   </Svg>
 );
 
-export default WhitePawn;
+const pieceMap: Record<string, any> = {
+  P: WhitePawn,
+};
+interface PieceProps {
+  src?: string;
+}
 
-export const Pieces = (props: any) => {
-  <WhitePawn />;
+// Pieces returns the corresponding Piece
+export const Pieces = ({ src = "P" }: PieceProps) => {
+  const SvgPiece = pieceMap[src];
+  return <SvgPiece />;
 };

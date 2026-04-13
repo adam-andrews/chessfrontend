@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import React, { useState } from "react";
-import Pieces from "../components/Piece";
+import { Pieces } from "../components/Piece";
 import { Chess } from "chess.js";
 interface PieceImages {
   K: ImageSourcePropType;
