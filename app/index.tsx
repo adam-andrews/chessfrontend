@@ -34,7 +34,7 @@ const pieceImages: PieceImages = {
   R: require("../assets/pieces/wR.png"),
   B: require("../assets/pieces/wB.png"),
   N: require("../assets/pieces/wN.png"),
-  P: require("../assets/pieces/wP.png"),
+  P: require("../assets/pieces/wP.svg"),
 
   // Black pieces
   k: require("../assets/pieces/K.png"),
