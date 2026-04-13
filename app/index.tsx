@@ -81,21 +81,33 @@ export default function Index() {
 
   const submit = () => {
     console.log("Input submitted:", text);
-    chess.move(text);
-    setText("");
-    const newBoard = fenToBoard(chess.fen());
-    setBoard(newBoard);
-    console.log(chess.fen());
+    if (chess.isGameOver()) return;
+    try {
+      chess.move(text);
+      const moves = chess.moves();
+      console.log(moves);
+      setText("");
+      const newBoard = fenToBoard(chess.fen());
+      setBoard(newBoard);
+    } catch {
+      setText("Illegal Move");
+    }
   };
   const handlePress = (rowIndex: number, colIndex: number) => {
+    // Gets the name of tge square e.g E4
     const squareName = chessSquares[colIndex] + (8 - rowIndex);
     const pieceCode = chessboard[rowIndex][colIndex];
 
     if (!pieceCode && !selectedSquare) return;
 
+    // Deselects the square if user presses on it again
     if (selectedSquare === squareName) {
       setSelectedSquare(null);
     } else {
+      //
+      const pieceMoves = chess.moves({ square: squareName });
+      setPossibleMoves(pieceMoves);
+      console.log(pieceMoves);
       setSelectedSquare(squareName);
     }
   };
