@@ -151,7 +151,6 @@ export default function Index() {
     <View style={styles.container}>
       <Text style={styles.title}>Chess Board</Text>
       <SvgComponent width={70} height={70} />
-      <Pieces />
 
       <View style={styles.board}>
         {board.split("/").map((row, rowIndex) => (
@@ -182,13 +181,7 @@ export default function Index() {
                     possibleMoves.includes(squareName) && (
                       <View style={styles.purpleDot} />
                     )}
-                  {pieceImages[pieceCode] && (
-                    <Image
-                      source={pieceImages[pieceCode]}
-                      style={styles.piece}
-                      resizeMode="contain"
-                    />
-                  )}
+                  {pieceImages[pieceCode] && <Pieces src={pieceCode} />}
                 </Pressable>
               );
             })}
