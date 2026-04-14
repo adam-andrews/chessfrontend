@@ -181,7 +181,14 @@ export default function Index() {
                     possibleMoves.includes(squareName) && (
                       <View style={styles.purpleDot} />
                     )}
-                  {pieceImages[pieceCode] && <Pieces src={pieceCode} />}
+                  {pieceImages[pieceCode] &&
+                    possibleMoves.includes(squareName) && (
+                      <Pieces src={pieceCode} outline="#B1A7FC" />
+                    )}
+                  {pieceImages[pieceCode] &&
+                    !possibleMoves.includes(squareName) && (
+                      <Pieces src={pieceCode} />
+                    )}
                 </Pressable>
               );
             })}
